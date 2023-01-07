@@ -7,6 +7,7 @@ import { FaStar } from "react-icons/fa";
 import { BsPlusSquare } from "react-icons/bs";
 import { db } from "../../firebase";
 import { storage } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 const PostRContainer = styled.div`
   background: #fff7ef;
@@ -212,7 +213,7 @@ const PostReview = (props) => {
   const [data, setData] = useState([]);
   const [loader, setLoader] = useState(true);
 
-  //모달창
+  // 모달창
   const [isOpen, setIsOpen] = useState(false);
 
   function Modal({ onClose }) {
@@ -246,7 +247,7 @@ const PostReview = (props) => {
     );
   }
 
-  //별점
+  // 별점
   const [clicked, setClicked] = useState([false, false, false, false, false]);
 
   const handleStarClick = (index) => {
@@ -261,14 +262,14 @@ const PostReview = (props) => {
     sendReview();
   }, [clicked]);
 
-  //별점 서버로 보내기
+  // 별점 서버로 보내기
   const sendReview = () => {
     let score = star;
     score = clicked.filter(Boolean).length;
     setStar(score);
   };
 
-  //사진 미리보기
+  // 사진 프리뷰
   const [imageUrl, setImageUrl] = useState(null);
   const ImgInput = useRef();
   const [preview, setPreview] = useState();
@@ -285,7 +286,7 @@ const PostReview = (props) => {
     }
   }, [imageUrl]);
 
-  //사진 업로드
+  // 사진 업로드
   const uploadeFiles = (file) => {
     const uploadTask = storage.ref(`files/${file.name}`).put(file);
     uploadTask.on(
@@ -310,8 +311,7 @@ const PostReview = (props) => {
     );
   };
 
-  //리뷰 위치
-
+  // 리뷰 위치
   const [currentValue, setCurrentValue] = useState("이대 정문"); // SelectBox 선택된 값
   const [showOptions, setShowOptions] = useState(false);
   const [place, setPlace] = useState(0);
@@ -333,7 +333,7 @@ const PostReview = (props) => {
 
   const bucket = db.collection(DBselect); // 어느 DB에 저장할지 선택
   //-------------------------------------------
-  //리뷰 등록 관련
+  // 리뷰 등록 관련
 
   var require1 = document.getElementById("text1");
   var require2 = document.getElementById("text2");
@@ -380,6 +380,10 @@ const PostReview = (props) => {
     uploadeFiles(ImgInput.current.files[0]);
   };
 
+  const navigate = useNavigate();
+  const navigateToList = () => {
+    navigate("/list");
+  };
   return (
     <>
       <GlobalFonts />
@@ -537,6 +541,7 @@ const PostReview = (props) => {
                   open={isOpen}
                   onClose={() => {
                     setIsOpen(false);
+                    navigateToList();
                   }}
                 />
               )}
